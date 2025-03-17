@@ -24,7 +24,7 @@ def application():
     # Socket server creation:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(('', 80))
-    s.listen(5) # maximum number of requests that can be queued
+    s.listen(5) # Maximum number of requests that can be queued
 
     try:
        while (True):
