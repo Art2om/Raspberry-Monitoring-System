@@ -40,8 +40,8 @@ def main():
     try:
        while (True):
         
-           connection, address = s.accept()
-           print(f"Connection from {address}")
+            connection, address = s.accept()
+            print(f"Connection from {address}")
 
             request = connection.recv(1024)
             request = str(request)
