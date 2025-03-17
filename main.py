@@ -1,23 +1,12 @@
-# Wireless Communication using Access Point Mode of RPi Pico W
-
-# Libraries
 import network
 import socket
-
-HTML = """
-    <!DOCTYPE html>
-    <html>
-        <body>        
-            <h1>Local Patient Status.</h1>
-        </body>
-    </html>
-    """
+import website
 
 # Encrypt this in the actual final product.
 ssid = 'Local_Network'
 password = 'Local Only'
 
-def main():
+def application():
 
     # Create an Access Point.
     ap = network.WLAN(network.AP_IF)
@@ -48,7 +37,7 @@ def main():
             print("User Request: " + request)
 
             connection.send("HTTP/1.1 200\n")
-            connection.send(HTML)
+            connection.send(website)
 
             connection.close()
 
@@ -61,5 +50,5 @@ def main():
         ap.active(False)
 
 if (__name__ == "__main__"):
-    main()
+    application()
 
