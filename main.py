@@ -52,7 +52,7 @@ def main():
 
             connection.close()
 
-    except (Exception as err):
+    except Exception as err:
         print(f"Occured an error: {err}")
 
     finally:
