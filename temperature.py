@@ -2,9 +2,9 @@ import machine
 import time
 import math
 
-adc_pin = machine.ADC(28)
-
 def temperature():
+
+  adc_pin = machine.ADC(28)
 
   Read_out = adc_pin.read_u16() # The read out from the ADC pin.
   Resistence = 35400            # The resitence at room temperature.
