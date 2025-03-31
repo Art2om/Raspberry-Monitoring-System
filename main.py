@@ -1,6 +1,9 @@
 import network
 import socket
-import website
+from website import *
+from temperature import temperature
+from oxymeter import Pulse_Ox
+from distance import measure_distance
 
 # Encrypt this in the actual final product.
 ssid = 'Local_Network'
