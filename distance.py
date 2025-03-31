@@ -17,44 +17,47 @@ def measure_distance():
     time.sleep_us(10)
     trigger_pin.value(0)
     
-    # Wait for echo to go high
+    # Wait for Echo to go catch the sounds emitted by the Trig.
     while echo_pin.value() == 0:
         pulse_start = time.ticks_us()
     
-    # Wait for echo to go low
+    # Wait for Echo to stop reciving the sound.
     while echo_pin.value() == 1:
         pulse_end = time.ticks_us()
     
     # The pulse duration:
     pulse_duration = time.ticks_diff(pulse_end, pulse_start)
     
-    # Speed of sound is 343 m/s or 34300 cm/s
-    # Distance = (Time × Speed) / 2 (round trip)
-
     # Since the speed of sound is ~343 m/s, which is 34300 cm/s,
     # however, the time we multiply by is in microseconds, so we adjust the speed accordingly.
+    # We divide by 2 since the sound had to travel there and back, which accounts for twice the distance.
     distance = (pulse_duration * 0.0343) / 2
     
     return (distance)
 
-try:
+def person_detected():
 
-    while True:
+    # If a patient is within 100cm of the device, then he is using the device.
+    return (measure_distance() <= 100)
 
-        distance = measure_distance()
-        print(f"Distance: {distance:.1f} cm")
-        
-        if (distance <= 100):
-            print("Person detected.")
-        
-        time.sleep(1)
-        
-except KeyboardInterrupt:
-    print("Test stopped by user")
+# Run this file directly to test this sensor exclusively.
+if (__name__ == "__main__"):
 
-finally:
+    try:
 
-    # Reset the trigger.
-    trigger_pin.value(0)
+        while (True):
 
-# I need to return out of this file a boolean when a person is detected.
+            print(f"Distance: {distance: .1f} cm")
+
+            if (person_detected()):
+                print("Person detected!")
+
+            time.sleep(1)
+
+    except KeyBoardInterrupt:
+        print("Interrupted by User.")
+
+    finally:
+
+        # Reset the Trig.
+        trigger_pin.value(0)
