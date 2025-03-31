@@ -1,6 +1,7 @@
 import network
 import socket
 import time
+import machine
 from website import *
 from temperature import temperature
 from oxymeter import Pulse_Ox
@@ -10,9 +11,12 @@ from distance import person_detected
 ssid = 'Local_Network'
 password = 'Local Only'
 
+led = machine.Pin("LED", machine.Pin.OUT)
+
 def generate_html():
 
-    temperature = temperature()
+    temperature_data = temperature()
+    print("Temperature confirmed.")
 
     try:
         oxygination = Pulse_Ox()
@@ -22,27 +26,39 @@ def generate_html():
     user_active = person_detected()
 
     # Format the current time to be displayed.
-    current_time = time.localtime()
-    time_string = "{:02d}:{02d}:{02d}".format(current_time[3], current_time[4], current_time[5])
+    # Originally meant to be implemented, but due to extensive errors with formatting,
+    # it will be left until the next patch. Investors don't invest in us enough for this.
+    #current_time = time.localtime()
+    #time_string = "{:02d}:{02d}:{02d}".format(current_time[3], current_time[4], current_time[5])
 
-    # Create the HTML with the sensor data.
+    # HTML with the sensor data.
     HTML = f"""
     <!DOCTYPE html>
 
     <html>
         <head>
-            <title>Patient Status:</title>
+            <title>Patient Status</title>
             <meta http-equiv = "refresh" content = "10">
         </head>
         
         <body>
             <h1>Local Patient Status:</h1>
-            <p>Last Updated: {time_sting}</p>
+            <p>Last Updated: NULL</p>
             <ul>
-                <li>Temperature: {temperature:.1f} °C</li>
+                <li>Temperature: {temperature_data:.1f} °C</li>
                 <li>SpO2 Level: {oxygination}</li>
                 <li>Patient Present: {user_active}</li>
             </ul>
+
+            <div>
+                <p>LED Control:</p>
+                <a href = "/led/on">
+                    <button>LED On</button>
+                </a>
+                <a href = "/led/off">
+                    <button>LED Off</button>
+                </a>
+            </div>
         </body>
     </html>
     """
@@ -80,10 +96,11 @@ def application():
             request = str(request)
             print("User Request: " + request)
 
-           response = generate_html()
+            response = generate_html()
+            print("Got through the iteration.")
 
             connection.send("HTTP/1.1 200\n")
-            connection.send("Conent-Type: text / html\n")
+            connection.send("Content-Type: text/html\n")
             connection.send("Closing the Connection.\n\n")
             connection.send(response)
 
@@ -99,4 +116,3 @@ def application():
 
 if (__name__ == "__main__"):
     application()
-
